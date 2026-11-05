@@ -1,338 +1,295 @@
 
-
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Infinity Storm</title>
+<meta name="theme-color" content="#080808">
+<title>Nexora Studios</title>
 
 <style>
-/* ===== BASE ===== */
-body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:#12002b;
-color:white;
-overflow-x:hidden;
-animation:fadePage .8s ease;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* ===== INTRO ===== */
-#intro{
-position:fixed;
-inset:0;
-background:radial-gradient(circle,#1a0033,#000);
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9999;
-animation:introOut 1s ease forwards;
-animation-delay:3s;
+body {
+    background: #080808;
+    color: white;
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
-#intro h1{
-font-size:2.4em;
-letter-spacing:4px;
-background:linear-gradient(90deg,#ff00ff,#00ffff,#ff00ff);
-background-size:300%;
--webkit-background-clip:text;
-color:transparent;
-animation:logoZoom 2s ease, shine 2s linear infinite;
-filter:drop-shadow(0 0 25px #ff00ff);
+.gold {
+    color: #d6ad55;
 }
 
-@keyframes logoZoom{
-from{transform:scale(.4);opacity:0;}
-to{transform:scale(1);opacity:1;}
+.screen {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px 22px;
+    position: relative;
+    overflow: hidden;
 }
 
-@keyframes shine{
-0%{background-position:0%;}
-100%{background-position:300%;}
+.screen::before {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: #c99b35;
+    filter: blur(130px);
+    opacity: 0.12;
+    border-radius: 50%;
+    top: 20%;
+    z-index: 0;
 }
 
-@keyframes introOut{
-to{opacity:0;visibility:hidden;}
+.content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 500px;
 }
 
-@keyframes fadePage{
-from{opacity:0;}
-to{opacity:1;}
+.logo {
+    font-size: 13px;
+    letter-spacing: 7px;
+    color: #d6ad55;
+    margin-bottom: 35px;
+    animation: fadeIn 1.5s ease;
 }
 
-/* ===== FUNDO ===== */
-#bg{
-position:fixed;
-inset:0;
-z-index:-1;
+h1 {
+    font-size: clamp(38px, 10vw, 58px);
+    letter-spacing: 5px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    animation: rise 1.2s ease both;
 }
 
-/* ===== HEADER ===== */
-header{
-position:fixed;
-top:0;
-width:100%;
-height:60px;
-background:rgba(10,0,30,.85);
-backdrop-filter:blur(10px);
-display:flex;
-align-items:center;
-justify-content:space-between;
-padding:0 20px;
-border-bottom:1px solid rgba(255,0,255,.3);
-z-index:100;
+.subtitle {
+    color: #999;
+    font-size: 14px;
+    letter-spacing: 2px;
+    line-height: 1.8;
+    animation: rise 1.5s ease both;
 }
 
-.logo{
-font-weight:bold;
-background:linear-gradient(90deg,#ff00ff,#00ffff);
--webkit-background-clip:text;
-color:transparent;
-animation:logoGlow 2s infinite alternate;
+button {
+    margin-top: 45px;
+    padding: 17px 45px;
+    background: linear-gradient(135deg, #f0d18a, #bd8d36);
+    border: none;
+    border-radius: 5px;
+    color: #080808;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 0 25px #bd8d3630;
+    animation: fadeIn 2s ease both;
 }
 
-@keyframes logoGlow{
-from{filter:drop-shadow(0 0 5px #ff00ff);}
-to{filter:drop-shadow(0 0 18px #00ffff);}
+button:active {
+    transform: scale(0.95);
 }
 
-.stats{
-font-size:.8em;
-color:#00ffaa;
+button:hover {
+    box-shadow: 0 0 30px #d6ad5580;
+    transform: translateY(-3px);
 }
 
-/* ===== CONTEÚDO ===== */
-h1{
-margin-top:100px;
-text-align:center;
+#home {
+    transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
-padding:20px 20px 80px;
+#home.hide {
+    opacity: 0;
+    transform: translateY(-50px);
+    pointer-events: none;
+    position: absolute;
+    width: 100%;
 }
 
-.card{
-padding:18px;
-border-radius:16px;
-background:rgba(255,255,255,0.06);
-backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,0.12);
-box-shadow:0 0 25px rgba(255,0,255,.35);
-text-align:center;
-transition:.25s;
-opacity:0;
-transform:translateY(40px);
-animation:cardUp .6s ease forwards;
+#dashboard {
+    display: none;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: 0.8s ease;
+    padding-top: 80px;
+    padding-bottom: 50px;
 }
 
-.card:nth-child(1){animation-delay:.1s;}
-.card:nth-child(2){animation-delay:.2s;}
-.card:nth-child(3){animation-delay:.3s;}
-.card:nth-child(4){animation-delay:.4s;}
-
-@keyframes cardUp{
-to{opacity:1;transform:translateY(0);}
+#dashboard.show {
+    display: flex;
+    animation: reveal 1s ease forwards;
 }
 
-.price{
-color:#00ffaa;
-margin:10px 0;
-font-weight:bold;
+.welcome {
+    font-size: 30px;
+    margin-bottom: 12px;
+    color: #d6ad55;
 }
 
-.card button{
-padding:10px;
-width:100%;
-border:none;
-border-radius:10px;
-background:linear-gradient(90deg,#ff00ff,#00ffff);
-color:white;
-font-weight:bold;
-cursor:pointer;
+.description {
+    color: #888;
+    font-size: 14px;
+    line-height: 1.8;
+    margin-bottom: 35px;
 }
 
-/* ===== ADMIN ===== */
-#adminPanel{
-position:fixed;
-bottom:10px;
-left:10px;
-background:#140033;
-padding:14px;
-border-radius:12px;
-box-shadow:0 0 25px #ff00ff;
-display:none;
-z-index:200;
-font-size:.85em;
+.card {
+    border: 1px solid #3b301d;
+    background: linear-gradient(145deg, #15130f, #0b0b0b);
+    border-radius: 10px;
+    padding: 25px 20px;
+    margin: 14px 0;
+    text-align: left;
+    transition: 0.3s;
+    animation: rise 0.8s ease both;
+}
+
+.card:hover {
+    border-color: #d6ad55;
+    transform: translateY(-4px);
+}
+
+.card h3 {
+    color: #d6ad55;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #999;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.footer {
+    margin-top: 45px;
+    color: #555;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes rise {
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- INTRO -->
-<div id="intro">
-<h1>INFINITY STORM</h1>
-</div>
+<section class="screen" id="home">
+    <div class="content">
 
-<canvas id="bg"></canvas>
+        <div class="logo">NEXORA PRESENTS</div>
 
-<header>
-<div class="logo">INFINITY STORM</div>
-<div class="stats">
-Pedidos: <span id="pedidos">0</span> |
-R$ <span id="faturamento">0.00</span>
-</div>
-</header>
+        <h1>NEXORA<br><span class="gold">STUDIOS</span></h1>
 
-<h1>🌌 Loja Oficial 🌌</h1>
+        <p class="subtitle">
+            CRIATIVIDADE QUE TRANSFORMA IDEIAS.<br>
+            DESIGN QUE MARCA PRESENÇA.
+        </p>
 
-<div class="cards" id="cards"></div>
+        <button onclick="entrar()">ENTRAR</button>
 
-<div id="adminPanel">
-<b>🔐 Admin</b><br>
-Pedidos: <span id="adminPedidos">0</span><br>
-Faturado: R$ <span id="adminFaturamento">0.00</span><br>
-<button onclick="resetar()">Resetar</button>
-</div>
+        <div class="footer">EST. 2026 · NEXORA STUDIOS</div>
+
+    </div>
+</section>
+
+<section class="screen" id="dashboard">
+    <div class="content">
+
+        <div class="logo">NEXORA STUDIOS</div>
+
+        <h2 class="welcome">Bem-vindo.</h2>
+
+        <p class="description">
+            Um espaço onde ideias ganham forma.<br>
+            Explore nosso universo criativo.
+        </p>
+
+        <div class="card">
+            <h3>01 · Identidade Visual</h3>
+            <p>Criação de marcas, logotipos e identidades únicas.</p>
+        </div>
+
+        <div class="card">
+            <h3>02 · Design Digital</h3>
+            <p>Artes digitais, layouts e experiências visuais.</p>
+        </div>
+
+        <div class="card">
+            <h3>03 · Projetos Criativos</h3>
+            <p>Transformamos conceitos em projetos especiais.</p>
+        </div>
+
+        <button onclick="voltar()">VOLTAR AO INÍCIO</button>
+
+        <div class="footer">NEXORA STUDIOS · TODOS OS DIREITOS RESERVADOS</div>
+
+    </div>
+</section>
 
 <script>
-/* remover intro */
-setTimeout(()=>{
-const intro=document.getElementById("intro");
-if(intro) intro.remove();
-},4000);
+function entrar() {
+    const home = document.getElementById("home");
+    const dashboard = document.getElementById("dashboard");
 
-/* ===== UNIVERSO ===== */
-const canvas=document.getElementById("bg");
-const ctx=canvas.getContext("2d");
+    home.classList.add("hide");
 
-function resize(){
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-}
-window.addEventListener("resize",resize);
-resize();
+    setTimeout(() => {
+        home.style.display = "none";
+        dashboard.style.display = "flex";
 
-const stars=[];
-for(let i=0;i<200;i++){
-stars.push({
-x:(Math.random()-0.5)*canvas.width,
-y:(Math.random()-0.5)*canvas.height,
-z:Math.random()*canvas.width,
-size:Math.random()*2+0.5
-});
+        requestAnimationFrame(() => {
+            dashboard.classList.add("show");
+        });
+    }, 700);
 }
 
-function animate(){
-ctx.fillStyle="#12002b";
-ctx.fillRect(0,0,canvas.width,canvas.height);
+function voltar() {
+    const home = document.getElementById("home");
+    const dashboard = document.getElementById("dashboard");
 
-const cx=canvas.width/2;
-const cy=canvas.height/2;
+    dashboard.style.display = "none";
+    dashboard.classList.remove("show");
 
-stars.forEach(s=>{
-s.z-=2;
-if(s.z<=1){
-s.z=canvas.width;
-s.x=(Math.random()-0.5)*canvas.width;
-s.y=(Math.random()-0.5)*canvas.height;
-}
-
-const k=128/s.z;
-const px=s.x*k+cx;
-const py=s.y*k+cy;
-
-ctx.beginPath();
-ctx.fillStyle="rgba(255,120,255,0.9)";
-ctx.arc(px,py,s.size*k,0,Math.PI*2);
-ctx.fill();
-});
-
-requestAnimationFrame(animate);
-}
-animate();
-
-/* ===== LOJA ===== */
-const NUMERO_WHATS="5516981901910 ";
-
-let pedidos=parseInt(localStorage.getItem("pedidos")||0);
-let faturamento=parseFloat(localStorage.getItem("faturamento")||0);
-
-function atualizar(){
-document.getElementById("pedidos").textContent=pedidos;
-document.getElementById("faturamento").textContent=faturamento.toFixed(2);
-document.getElementById("adminPedidos").textContent=pedidos;
-document.getElementById("adminFaturamento").textContent=faturamento.toFixed(2);
-}
-atualizar();
-
-const products = [
-  { name: "Venom", price: 10 },
-  { name: "Control", price: 40.9 },
-  { name: "~Conta?", price: 137.50 },
-
-  { name: "Gravity", price: 9.00 },
-  { name: "Spirit", price: 12.50 },
-  { name: "Dough", price: 13.50 },
-  { name: "Yeti", price: 14.00 }
-
-].sort((a, b) => a.price - b.price);
-
-
-
-const container=document.getElementById("cards");
-
-products.forEach(p=>{
-container.innerHTML+=`
-<div class="card">
-<h3>${p.name}</h3>
-<div class="price">R$ ${p.price.toFixed(2)}</div>
-<button onclick="comprar('${p.name}',${p.price})">Comprar</button>
-</div>
-`;
-});
-
-function comprar(produto,preco){
-const nome=prompt("Digite seu nome:");
-if(!nome) return;
-
-pedidos++;
-faturamento+=preco;
-
-localStorage.setItem("pedidos",pedidos);
-localStorage.setItem("faturamento",faturamento);
-atualizar();
-
-const msg=
-`🚀 NOVO PEDIDO
-
-👤 Nome: ${nome}
-🛒 Produto: ${produto}
-💰 Valor: R$ ${preco.toFixed(2)}
-Pedido Nº: ${pedidos}`;
-
-window.open(`https://wa.me/${NUMERO_WHATS}?text=${encodeURIComponent(msg)}`,"_blank");
-}
-
-/* ===== ADMIN SECRETO ===== */
-let segredo="";
-document.addEventListener("keydown",e=>{
-segredo+=e.key;
-if(segredo.includes("admin123")){
-document.getElementById("adminPanel").style.display="block";
-}
-});
-
-function resetar(){
-localStorage.clear();
-location.reload();
+    home.style.display = "flex";
+    home.classList.remove("hide");
 }
 </script>
 
 </body>
 </html>
+
